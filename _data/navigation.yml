@@ -14,7 +14,7 @@ main:
 #    url: /categories/daily/
 
 sidebar-main:
-  - title: "Series"
+  - title: "Categories"
     children:
-      - title: "객체지향 이야기"
-        url: /categories/series/oop/
+      - title: "토막상식"
+        url: /categories/shorts/

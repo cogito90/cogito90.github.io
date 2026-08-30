@@ -3,7 +3,7 @@
 title:  "접근 제어자란 ?"
 excerpt: "Java의 접근 제어자에 관한 고찰"
 categories:
-- Shorts
+- shorts
 
 tags:
 - access
@@ -13,8 +13,8 @@ tags:
 - protected
 
 header:
-  teaser: https://drive.google.com/uc?id=1b9L7WldMUzO64eYoxUGCnn0Ubb9jlWz3
-  overlay_image: https://drive.google.com/uc?id=1b9L7WldMUzO64eYoxUGCnn0Ubb9jlWz3
+  teaser: /assets/images/default-teaser.jpg
+  overlay_image: /assets/images/default-teaser.jpg
   overlay_filter: 0.5
 
 published: false

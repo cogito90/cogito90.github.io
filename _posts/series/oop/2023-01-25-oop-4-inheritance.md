@@ -3,7 +3,7 @@
 title:  "객체지향 이야기 - 4장"
 excerpt: "객체지향 언어의 4가지 특징 - 상속"
 categories:
-- 객체지향 이야기
+- oop
 
 tags:
 - Java
@@ -15,8 +15,8 @@ tags:
 related_key: OOP
 
 header:
-  teaser: https://drive.google.com/uc?id=1G_jevpqrq8QXZTyW3fuzw2-wTxa7YWGx
-  overlay_image: https://drive.google.com/uc?id=1G_jevpqrq8QXZTyW3fuzw2-wTxa7YWGx
+  teaser: /assets/images/oop-teaser.jpg
+  overlay_image: /assets/images/oop-teaser.jpg
   overlay_filter: 0.5
 
 last_modified_at: 2023-02-05T23:22:55
@@ -144,7 +144,7 @@ SmartPhone은 자신만의 `call()` 메서드를 가지게 되었습니다! 그�
 
 <div markdown="1" style="max-width: 400px; margin-left: auto; margin-right: auto" >
 
-![이미지](https://drive.google.com/uc?id=1gsfnyIOVfDV0n4yoA9xo2jVRKsqJaoQ2)
+![이미지](/assets/images/oop/oop-4-inheritance-01.png)
 *완벽한 상하관계에 있다*
 </div>
 

@@ -3,7 +3,7 @@
 title:  "객체지향 이야기 - 3장"
 excerpt: "객체지향 언어의 4가지 특징 - 캡슐화"
 categories:
-- 객체지향 이야기
+- oop
 
 tags:
 - Java
@@ -15,8 +15,8 @@ tags:
 related_key: OOP
 
 header:
-  teaser: https://drive.google.com/uc?id=1G_jevpqrq8QXZTyW3fuzw2-wTxa7YWGx
-  overlay_image: https://drive.google.com/uc?id=1G_jevpqrq8QXZTyW3fuzw2-wTxa7YWGx
+  teaser: /assets/images/oop-teaser.jpg
+  overlay_image: /assets/images/oop-teaser.jpg
   overlay_filter: 0.5
 
 last_modified_at: 2023-02-05T23:22:55

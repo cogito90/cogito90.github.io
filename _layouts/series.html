@@ -6,12 +6,13 @@ layout: archive
 
 <ul class="taxonomy__index">
   {% for category in site.categories %}
-    {% if category[0] == "Shorts" %}
+    {% if category[0] == "shorts" %}
       {% continue %}
     {% endif %}
     <li>
+      {% assign category_key = category[0] %}{% assign category_label = site.data.category_names[category_key] | default: category_key %}
       <a href="#{{ category[0] | slugify }}">
-        <strong>{{ category[0] }}</strong> <span class="taxonomy__count">{{ category[1].size }}</span>
+        <strong>{{ category_label }}</strong> <span class="taxonomy__count">{{ category[1].size }}</span>
       </a>
     </li>
   {% endfor %}
@@ -19,11 +20,11 @@ layout: archive
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 {% for category in site.categories %}
-  {% if category[0] == "Shorts" %}
+  {% if category[0] == "shorts" %}
     {% continue %}
   {% endif %}
   <section id="{{ category[0] | slugify | downcase }}" class="taxonomy__section">
-    <h2 class="archive__subtitle">{{ category[0] }}</h2>
+    {% assign category_key = category[0] %}{% assign category_label = site.data.category_names[category_key] | default: category_key %}<h2 class="archive__subtitle">{{ category_label }}</h2>
     <div class="entries-{{ entries_layout }}">
       {% for post in category.last %}
       {% include archive-single.html type=entries_layout %}

@@ -6,6 +6,7 @@
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
+@import "custom/glacier";  // 삶은개발 커스텀 레이어
 
 @font-face {
   font-family: 'Pretendard-Regular';

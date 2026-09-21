@@ -1,0 +1,1196 @@
+// ==========================================================================
+//  Glacier — 삶은개발 커스텀 레이어
+//  minimal-mistakes(air 스킨) 위에 덮어쓰는 단일 파일.
+//  테마 원본(_sass/minimal-mistakes/**)은 건드리지 않는다.
+// ==========================================================================
+
+// --------------------------------------------------------------------------
+// 1. 토큰
+// --------------------------------------------------------------------------
+:root {
+  --ink:        #0d1117;
+  --ink-2:      #39424e;
+  --ink-3:      #5b6672;
+  --ink-4:      #7b8592;
+  --paper:      #fbfcfd;
+  --paper-2:    #f2f5f8;
+  --line:       #e3e8ee;
+  --line-2:     #eef2f6;
+  --accent:     #0e7490;
+  --accent-ink: #0a5a71;
+  --accent-soft:#e0f2f7;
+  --warn:       #a1540a;
+  --avatar-bg:  #d5e4ef;
+  --avatar-ring: rgba(13, 17, 23, 0.12);
+
+  // 코드 신택스 — 배경 #f2f5f8 기준 전부 WCAG AA(4.5) 이상
+  --code-fg:      #0d1117;
+  --code-comment: #4f5a66;
+  --code-keyword: #0b6070;
+  --code-string:  #8a4a05;
+  --code-number:  #7226a6;
+  --code-func:    #1a4fb0;
+  --code-punct:   #232b34;
+  --code-tag:     #99200f;
+  --shadow:     0 1px 2px rgba(13, 17, 23, 0.04), 0 8px 24px -12px rgba(13, 17, 23, 0.18);
+
+  --gl-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --gl-measure: min(100%, 880px);   // 목차 없는 페이지의 읽기 폭
+  --gl-toc-width: 300px;            // 우측 목차 폭
+  --gl-side-width: 280px;           // 좌측 사이드바 폭 (시리즈/같은 카테고리)
+  --gl-side-gap: 72px;              // 사이드바와 본문 사이
+  --gl-toc-gap: 80px;               // 본문과 목차 사이 — 구분용 패딩, 그 이상 아님
+  --gl-radius: 14px;
+}
+
+@mixin glacier-dark {
+  --ink:        #e9eef4;
+  --ink-2:      #bcc6d2;
+  --ink-3:      #98a3b1;
+  --ink-4:      #7d8896;
+  --paper:      #0c1014;
+  --paper-2:    #141a21;
+  --line:       #232b34;
+  --line-2:     #1a212a;
+  --accent:     #4dd0e1;
+  --accent-ink: #8ae4f0;
+  --accent-soft:#12303a;
+  --warn:       #e0a252;
+  --avatar-bg:  #1a212a;
+  --avatar-ring: rgba(233, 238, 244, 0.14);
+
+  // 배경 #141a21 기준
+  --code-fg:      #e9eef4;
+  --code-comment: #a9b4c2;
+  --code-keyword: #6fd9ec;
+  --code-string:  #f2b27a;
+  --code-number:  #d9a5f5;
+  --code-func:    #94bbff;
+  --code-punct:   #dde4ec;
+  --code-tag:     #ff9e8a;
+  --shadow:     0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.7);
+}
+
+// 기본은 라이트. 다크는 토글로 명시했을 때만 — OS 설정을 따라가지 않는다.
+:root[data-theme="dark"] { @include glacier-dark; }
+
+// --------------------------------------------------------------------------
+// 2. 베이스
+// --------------------------------------------------------------------------
+// 테마의 $sans-serif 는 Pretendard-Regular(400) 하나뿐이라 800 굵기가 합성된다.
+// Variable 판으로 갈아끼워 실제 굵기를 쓴다.
+body,
+h1, h2, h3, h4, h5, h6,
+.site-title,
+.page__title,
+.archive__item-title,
+button, input, select, textarea {
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Segoe UI", system-ui, "Malgun Gothic", sans-serif;
+}
+
+html { background: var(--paper); }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.75;
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection { background: var(--accent-soft); color: var(--accent-ink); }
+
+a { color: var(--accent); }
+a:hover,
+a:focus { color: var(--accent-ink); }
+
+h1, h2, h3, h4, h5, h6 { color: var(--ink); letter-spacing: -0.035em; }
+
+hr { border: 0; border-top: 1px solid var(--line); margin: 3em 0; }
+
+// 본문 폭 — 테마의 susy 그리드를 비우고 단일 컬럼으로
+#main {
+  max-width: min(94vw, 1510px);
+  padding-left: clamp(20px, 5vw, 48px);
+  padding-right: clamp(20px, 5vw, 48px);
+  padding-top: clamp(32px, 5vw, 52px);
+  margin-top: 0;
+}
+
+// 홈은 히어로가 자체 여백을 갖는다
+.layout--home #main { padding-top: 0; }
+
+.page,
+.archive {
+  float: none;
+  width: 100%;
+  padding-right: 0;
+
+  @include breakpoint($large)  { width: 100%; padding-right: 0; }
+  @include breakpoint($x-large) { width: 100%; padding-right: 0; }
+}
+
+// --------------------------------------------------------------------------
+// 3. 마스트헤드
+// --------------------------------------------------------------------------
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--paper) 80%, transparent);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid var(--line);
+  padding-top: env(safe-area-inset-top, 0px);
+
+  &__inner-wrap {
+    max-width: min(94vw, 1510px);
+    padding: 0 clamp(20px, 5vw, 48px);
+  }
+}
+
+.greedy-nav {
+  background: transparent;
+  min-height: 60px;
+  align-items: center;
+
+  a { color: var(--ink-3); }
+
+  .site-title {
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    padding-left: 0;
+    margin-right: 22px;
+
+    &::before {
+      content: "~/";
+      font-family: var(--gl-mono);
+      font-weight: 500;
+      font-size: 15px;
+      color: var(--accent);
+    }
+  }
+
+  .visible-links a {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink-3);
+
+    &::before { background: var(--accent); height: 2px; }
+    &:hover { color: var(--ink); }
+  }
+
+  .hidden-links {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--gl-radius);
+    box-shadow: var(--shadow);
+
+    a { color: var(--ink-2); }
+    a:hover { color: var(--accent); background: var(--paper-2); }
+    &::before { border-bottom-color: var(--line); }
+    &::after { border-bottom-color: var(--paper); }
+  }
+
+  button { color: var(--ink-3); }
+  .navicon,
+  .navicon::before,
+  .navicon::after { background: var(--ink-3); }
+}
+
+// 테마 토글
+.gl-theme-toggle {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  margin-left: 14px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.16s ease, border-color 0.16s ease;
+
+  &:hover { color: var(--ink); border-color: var(--ink-4); }
+  svg { width: 15px; height: 15px; display: block; }
+
+  .gl-icon-moon { display: block; }
+  .gl-icon-sun { display: none; }
+}
+
+:root[data-theme="dark"] .gl-theme-toggle {
+  .gl-icon-moon { display: none; }
+  .gl-icon-sun { display: block; }
+}
+
+:root[data-theme="light"] .gl-theme-toggle {
+  .gl-icon-moon { display: block; }
+  .gl-icon-sun { display: none; }
+}
+
+// --------------------------------------------------------------------------
+// 4. 공통 조각
+// --------------------------------------------------------------------------
+.gl-eyebrow {
+  font-family: var(--gl-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+}
+
+.gl-chip {
+  display: inline-block;
+  font-family: var(--gl-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 10px;
+  line-height: 1.5;
+  white-space: nowrap;
+  transition: color 0.16s ease, border-color 0.16s ease;
+
+  &:hover { color: var(--accent); border-color: var(--accent); }
+}
+
+.gl-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 15px;
+  transition: color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+
+  &:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  i { font-size: 14px; }
+}
+
+// --------------------------------------------------------------------------
+// 5. 홈 히어로
+// --------------------------------------------------------------------------
+.gl-hero {
+  padding: clamp(56px, 9vw, 104px) 0 clamp(40px, 6vw, 64px);
+  border-bottom: 1px solid var(--line);
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: clamp(24px, 5vw, 64px);
+    align-items: center;
+  }
+
+  &__title {
+    margin: 14px 0 0;
+    font-size: clamp(30px, 5.4vw, 50px);
+    line-height: 1.24;
+    letter-spacing: -0.045em;
+    font-weight: 800;
+    max-width: 20ch;
+
+    em {
+      font-style: normal;
+      color: var(--accent);
+      background: linear-gradient(transparent 64%, var(--accent-soft) 64%);
+      padding: 0 0.06em;
+    }
+  }
+
+  &__lede {
+    margin: 20px 0 0;
+    max-width: 46ch;
+    color: var(--ink-2);
+    font-size: 16.5px;
+  }
+
+  &__links {
+    display: flex;
+    gap: 10px;
+    margin-top: 26px;
+    flex-wrap: wrap;
+  }
+
+  &__avatar img {
+    display: block;
+    width: clamp(108px, 17vw, 164px);
+    height: auto;
+    border-radius: 50%;
+    background: var(--avatar-bg);
+    box-shadow: inset 0 0 0 1px var(--avatar-ring), 0 0 0 1px var(--avatar-ring), var(--shadow);
+  }
+
+  @media (max-width: 760px) {
+    &__grid { grid-template-columns: 1fr; gap: 28px; }
+    &__avatar { order: -1; }
+  }
+}
+
+// --------------------------------------------------------------------------
+// 6. 글 목록
+// --------------------------------------------------------------------------
+.archive__subtitle {
+  display: none; // 자체 섹션 헤더로 대체
+}
+
+.gl-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding-top: clamp(40px, 6vw, 64px);
+
+  h2 { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+  .gl-more { margin-left: auto; font-size: 13px; color: var(--ink-3); }
+  .gl-more:hover { color: var(--accent); }
+}
+
+.entries-list {
+  margin-top: 20px;
+  border-top: 1px solid var(--line);
+  counter-reset: gl-entry;
+}
+
+.list__item {
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--line);
+  counter-increment: gl-entry;
+
+  .archive__item {
+    display: grid;
+    grid-template-columns: 2.6em minmax(0, 1fr) auto;
+    gap: 0 24px;
+    align-items: start;
+    padding: 26px 10px;
+    margin: 0 -10px;
+    border-radius: var(--gl-radius);
+    transition: background 0.18s ease;
+
+    &::before {
+      content: counter(gl-entry, decimal-leading-zero);
+      font-family: var(--gl-mono);
+      font-size: 12px;
+      color: var(--ink-4);
+      padding-top: 6px;
+      grid-column: 1;
+      grid-row: 1 / span 3;
+      align-self: start;
+    }
+
+    &:hover { background: var(--paper-2); }
+  }
+
+  .archive__item-title {
+    grid-column: 2;
+    margin: 0;
+    font-size: 19.5px;
+    line-height: 1.45;
+    font-weight: 700;
+    letter-spacing: -0.032em;
+    border-bottom: 0;
+    padding-bottom: 0;
+
+    a { color: var(--ink); text-decoration: none; }
+    a:hover { color: var(--accent); }
+    .fa-link { display: none; }
+  }
+
+  .archive__item-excerpt {
+    grid-column: 2;
+    margin: 8px 0 0;
+    color: var(--ink-3);
+    font-size: 14.5px;
+    line-height: 1.7;
+    max-width: 60ch;
+  }
+
+  .gl-entry-tags {
+    grid-column: 2;
+    display: flex;
+    gap: 6px;
+    margin-top: 13px;
+    flex-wrap: wrap;
+  }
+
+  .gl-entry-meta {
+    grid-column: 3;
+    grid-row: 1 / span 3;
+    align-self: start;
+    font-family: var(--gl-mono);
+    font-size: 11.5px;
+    color: var(--ink-4);
+    text-align: right;
+    padding-top: 6px;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-end;
+
+    .gl-entry-cat { color: var(--accent); font-weight: 500; text-transform: capitalize; }
+  }
+
+  @media (max-width: 760px) {
+    .archive__item {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 22px 10px;
+
+      &::before { display: none; }
+    }
+    .archive__item-title,
+    .archive__item-excerpt,
+    .gl-entry-tags,
+    .gl-entry-meta { grid-column: 1; }
+    .gl-entry-meta {
+      grid-row: auto;
+      align-self: auto;
+      flex-direction: row;
+      align-items: flex-start;
+      text-align: left;
+      gap: 12px;
+      padding: 12px 0 0;
+    }
+  }
+}
+
+// 카테고리/태그 아카이브 페이지
+.archive__item-title { color: var(--ink); }
+.taxonomy__index,
+.back-to-top { color: var(--ink-3); }
+.taxonomy__section .archive__item-title { color: var(--ink); }
+
+// --------------------------------------------------------------------------
+// 7. 글 상세
+// --------------------------------------------------------------------------
+.gl-post-head {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 30px;
+  margin-bottom: 8px;
+
+  &__kicker {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  &__cat {
+    font-family: var(--gl-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 3px 11px;
+  }
+
+  &__lede {
+    margin: 18px 0 0;
+    font-size: 17px;
+    color: var(--ink-2);
+    line-height: 1.8;
+  }
+
+  &__byline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 26px;
+    flex-wrap: wrap;
+
+    img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--avatar-bg);
+      box-shadow: 0 0 0 1px var(--avatar-ring);
+      display: block;
+    }
+
+    b { font-size: 14px; font-weight: 700; color: var(--ink); }
+    .gl-mono { font-family: var(--gl-mono); font-size: 11.5px; color: var(--ink-4); }
+    .gl-dot { color: var(--ink-4); }
+  }
+}
+
+.page__title {
+  margin: 0;
+  max-width: calc(100% - var(--gl-toc-width) - var(--gl-toc-gap));
+  font-size: clamp(27px, 4.4vw, 41px);
+  line-height: 1.3;
+  letter-spacing: -0.045em;
+  font-weight: 800;
+  border-bottom: 0;
+  padding-bottom: 0;
+
+  a { color: var(--ink); text-decoration: none; }
+}
+
+.page__content {
+  // 박스 자체는 넓게 둔다. 목차가 이 박스의 오른쪽 끝을 기준으로 뜨기 때문에
+  // 여기에 max-width 를 걸면 목차가 본문에 달라붙고 오른쪽이 통째로 비어버린다.
+  // 읽기 폭은 아래에서 자식 요소에만 건다.
+  max-width: none;
+  font-size: 16.5px;
+  line-height: 1.92;
+  color: var(--ink-2);
+
+  > * { max-width: var(--gl-measure); }
+  > .sidebar__right { max-width: none; }
+
+  // 목차가 붙는 페이지에서는 남는 폭을 본문이 전부 가져간다.
+  // 예전엔 본문을 880px 로 자르고 목차만 오른쪽 끝에 붙여서 사이가 통째로 비었다.
+  @include breakpoint($large) {
+    &:has(> .sidebar__right) > *:not(.sidebar__right) {
+      max-width: calc(100% - var(--gl-toc-width) - var(--gl-toc-gap));
+    }
+  }
+
+  > p,
+  > ul,
+  > ol,
+  > dl,
+  > figure,
+  > table { margin: 0 0 1.35em; }
+
+  h2 {
+    color: var(--ink);
+    font-size: 23px;
+    line-height: 1.45;
+    font-weight: 800;
+    letter-spacing: -0.038em;
+    margin: 2.6em 0 0.7em;
+    border-bottom: 0;
+    padding-bottom: 0;
+    scroll-margin-top: 84px;
+  }
+
+  h3 {
+    color: var(--ink);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin: 2em 0 0.6em;
+    scroll-margin-top: 84px;
+  }
+
+  h4, h5, h6 { color: var(--ink); scroll-margin-top: 84px; }
+
+  strong, b { color: var(--ink); font-weight: 700; }
+
+  a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  ul, ol { padding-left: 1.35em; }
+  li { margin: 0.45em 0; }
+  li::marker { color: var(--accent); }
+
+  blockquote {
+    margin: 2em 0;
+    padding: 2px 0 2px 22px;
+    border-left: 2px solid var(--accent);
+    color: var(--ink-3);
+    font-size: 16px;
+    font-style: normal;
+
+    p { margin: 0; }
+  }
+
+  img { border-radius: var(--gl-radius); }
+
+  // 우측 목차는 본문이 아니다 — 본문 링크 규칙에서 빼낸다
+  .sidebar__right a { text-decoration: none; }
+}
+
+// 코드
+code {
+  font-family: var(--gl-mono);
+  font-size: 0.855em;
+  background: var(--paper-2);
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  padding: 0.12em 0.4em;
+  color: var(--ink);
+}
+
+// 테마가 `p > code` 등 (0,0,2) 로 밝은 배경을 박아둔다. 같은 특이도로 되받는다.
+p > code,
+a > code,
+li > code,
+dd > code,
+figcaption > code,
+td > code,
+blockquote > code,
+h1 > code, h2 > code, h3 > code, h4 > code, h5 > code, h6 > code {
+  background: var(--paper-2);
+  border: 1px solid var(--line-2);
+  color: var(--ink);
+  font-size: 0.855em;
+}
+
+pre {
+  font-family: var(--gl-mono);
+  background: var(--paper-2);
+  color: var(--ink);
+}
+
+div.highlighter-rouge,
+figure.highlight {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: var(--gl-radius);
+  color: var(--ink);
+  box-shadow: none;
+
+  pre.highlight,
+  pre {
+    background: transparent;
+    border: 0;
+    margin: 0;
+    padding: 16px 18px;
+    font-size: 14px;
+    font-weight: 500; // 다크 배경에서 400 은 얇게 뭉갠다
+    line-height: 1.8;
+  }
+
+  code { background: transparent; border: 0; padding: 0; }
+}
+
+// ── 신택스 하이라이팅 ──────────────────────────────────────────────────────
+// air 스킨의 팔레트는 어두운 배경용이라 밝은 코드블럭 위에서 대비가 1.06 까지
+// 떨어진다. 토큰 전체를 두 테마 모두 AA 이상으로 다시 깐다.
+.highlight {
+  color: var(--code-fg);
+
+  // 주석
+  .c, .ch, .cd, .cm, .c1, .cs, .cp, .cpf { color: var(--code-comment); font-style: normal; }
+
+  // 키워드
+  .k, .kc, .kd, .kn, .kp, .kr, .kt, .kv { color: var(--code-keyword); }
+
+  // 연산자 / 구두점
+  .o, .ow, .p, .pi { color: var(--code-punct); }
+
+  // 문자열
+  .s, .sa, .sb, .sc, .dl, .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss { color: var(--code-string); }
+
+  // 숫자
+  .m, .mb, .mf, .mh, .mi, .il, .mo, .mx { color: var(--code-number); }
+
+  // 함수 / 클래스
+  .nf, .fm, .nc, .nd, .ne { color: var(--code-func); }
+
+  // 태그 / 속성 / 변수 이름
+  .nt { color: var(--code-tag); }
+  .n, .na, .nb, .bp, .ni, .nl, .nn, .nx, .py, .no, .nv, .vc, .vg, .vi, .vm { color: var(--code-fg); }
+
+  // 에러 / diff
+  .err { color: var(--code-tag); background: transparent; }
+  .gd { color: var(--code-tag); }
+  .gi { color: var(--code-keyword); }
+  .gh, .gu { color: var(--code-comment); }
+  .ge { font-style: italic; }
+  .gs { font-weight: 700; }
+
+  // 공백은 색을 갖지 않는다
+  .w { color: inherit; }
+}
+
+// notice
+.notice,
+.notice--primary,
+.notice--info,
+.notice--warning,
+.notice--success,
+.notice--danger {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--gl-radius);
+  box-shadow: none;
+  color: var(--ink-2);
+  font-size: 15px;
+  padding: 16px 20px;
+}
+
+// 태그 / 카테고리 — 두 개의 <p> 로 나뉘어 있어 기본은 두 줄이 된다.
+// display:contents 로 껍데기를 걷어내고 칩만 한 줄에 흘린다.
+footer.page__meta {
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-top: 52px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+
+  .page__meta-title { display: none; }
+
+  .page__taxonomy,
+  .page__taxonomy > span[itemprop="keywords"] { display: contents; }
+
+  .page__taxonomy strong,
+  .page__taxonomy .sep { display: none; }
+
+  .page__taxonomy-item {
+    display: inline-block;
+    font-family: var(--gl-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--ink-3);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 10px;
+    line-height: 1.5;
+    text-decoration: none;
+    transition: color 0.16s ease, border-color 0.16s ease;
+
+    &:hover { color: var(--accent); border-color: var(--accent); }
+  }
+}
+
+.page__meta,
+.page__date { color: var(--ink-4); font-family: var(--gl-mono); font-size: 11.5px; }
+
+// 이전 / 다음
+.pagination--pager {
+  border: 1px solid var(--line);
+  border-radius: var(--gl-radius);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  padding: 18px 20px;
+  text-transform: none;
+  transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+
+  &:hover {
+    background: var(--paper);
+    color: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+}
+
+.pagination {
+  a {
+    border-color: var(--line);
+    color: var(--ink-2);
+    border-radius: 9px;
+  }
+  a:hover { color: var(--accent); border-color: var(--accent); background: transparent; }
+  a.current, a.current:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .disabled { color: var(--ink-4); }
+}
+
+// --------------------------------------------------------------------------
+// 8. 목차 (우측 고정)
+// --------------------------------------------------------------------------
+// 테마는 .page 에 padding-right 를 주고 목차를 음수 마진으로 그 위에 겹친다.
+// 위에서 .page 의 padding-right 를 0 으로 만들었으니 음수 마진도 같이 걷어내야
+// 목차가 컨테이너 밖으로 튀어나가지 않는다.
+.sidebar__right {
+  @include breakpoint($large)   { width: var(--gl-toc-width); margin-right: 0; }
+  @include breakpoint($x-large) { width: var(--gl-toc-width); margin-right: 0; }
+}
+
+.toc {
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+  font-size: 13.5px;
+
+  .nav__title {
+    background: transparent;
+    color: var(--ink-4);
+    font-family: var(--gl-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 0;
+    padding: 0 0 14px;
+
+    i { display: none; }
+  }
+
+  .toc__menu {
+    border-left: 1px solid var(--line);
+
+    li { border-bottom: 0; }
+
+    a {
+      display: block;
+      padding: 7px 0 7px 16px;
+      margin-left: -1px;
+      color: var(--ink-3);
+      border-bottom: 0; // 테마는 항목마다 밑줄을 긋는다
+      border-left: 1px solid transparent;
+      line-height: 1.55;
+      font-size: 13.5px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.16s ease, border-color 0.16s ease;
+
+      &:hover { background: transparent; color: var(--ink); }
+    }
+
+    li ul li a { padding-left: 30px; font-size: 13px; }
+
+    .active a,
+    a.active {
+      background: transparent;
+      color: var(--accent);
+      border-left-color: var(--accent);
+      font-weight: 600;
+    }
+  }
+}
+
+// --------------------------------------------------------------------------
+// 9. 사이드바 / 저자
+// --------------------------------------------------------------------------
+.sidebar {
+  opacity: 1;
+
+  .author__avatar img {
+    border-radius: 50%;
+    background: var(--avatar-bg);
+    box-shadow: 0 0 0 1px var(--avatar-ring), var(--shadow);
+    max-width: 140px;
+  }
+
+  .author__name { font-size: 17px; font-weight: 800; letter-spacing: -0.03em; color: var(--ink); }
+  .author__bio { color: var(--ink-3); font-size: 14px; }
+  .author__urls { background: var(--paper); border-color: var(--line); box-shadow: var(--shadow); }
+  .author__urls a { color: var(--ink-2); }
+  .author__urls a:hover { color: var(--accent); text-decoration: none; }
+  .btn--inverse { border-color: var(--line); color: var(--ink-2); }
+
+  h3, .nav__title { color: var(--ink); }
+  .nav__list .nav__items a { color: var(--ink-3); }
+  .nav__list .nav__items a:hover { color: var(--accent); }
+}
+
+// --------------------------------------------------------------------------
+// 10. 푸터
+// --------------------------------------------------------------------------
+.page__footer {
+  background: var(--paper);
+  color: var(--ink-4) !important; // air 스킨의 `color: #fff !important` 를 되돌린다
+  border-top: 1px solid var(--line);
+  margin-top: 96px;
+
+  footer {
+    max-width: min(94vw, 1510px);
+    padding: 40px clamp(20px, 5vw, 48px) calc(48px + env(safe-area-inset-bottom, 0px));
+  }
+
+  a { color: var(--ink-3); text-decoration: none; }
+  a:hover { color: var(--accent); }
+}
+
+.gl-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 28px;
+  align-items: center;
+  font-size: 13px;
+
+  &__mono {
+    margin-left: auto;
+    font-family: var(--gl-mono);
+    font-size: 12px;
+    color: var(--ink-4);
+  }
+}
+
+// 테마 잔재 정리
+.page__footer-follow,
+.page__footer-copyright { display: none; }
+
+// --------------------------------------------------------------------------
+// 11. 읽기 진행 바
+// --------------------------------------------------------------------------
+.gl-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: var(--accent);
+  z-index: 60;
+  transition: width 0.08s linear;
+}
+
+// --------------------------------------------------------------------------
+// 12. 댓글 (utterances)
+// --------------------------------------------------------------------------
+// 스크립트가 주입하는 .utterances 는 max-width:760px + margin:0 auto 라 화면 중앙에 선다.
+// 본문 칼럼과 같은 자리에 왼쪽으로 붙인다.
+.gl-comments {
+  clear: both; // 우측 목차가 float 이다
+  margin-top: 48px;
+  // 태그 줄과 같이 본문+목차 전체 폭을 쓴다. 본문 폭에만 맞추면 오른쪽이 빈다.
+  max-width: none;
+
+  .utterances {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+// --------------------------------------------------------------------------
+// 13. 좌측 사이드바 (글 상세 3단)
+// --------------------------------------------------------------------------
+// 1280px 미만에서는 숨긴다 — 2단(본문+목차)으로 동작.
+.gl-side { display: none; }
+
+@include breakpoint($x-large) {
+  .layout--single #main:has(> .gl-side) {
+    display: grid;
+    grid-template-columns: var(--gl-side-width) minmax(0, 1fr);
+    column-gap: var(--gl-side-gap);
+    align-items: start;
+  }
+
+  .gl-side {
+    display: block;
+    position: sticky;
+    top: 84px;
+    padding-top: clamp(32px, 5vw, 52px); // #main 의 padding-top 과 눈높이를 맞춘다
+  }
+}
+
+.gl-side {
+  &__label {
+    font-family: var(--gl-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+  }
+
+  &__title {
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    border-left: 1px solid var(--line);
+  }
+
+  &__item {
+    display: flex;
+    gap: 9px;
+    margin-left: -1px;
+    border-left: 1px solid transparent;
+
+    &.is-current {
+      border-left-color: var(--accent);
+
+      .gl-side__link { color: var(--accent); font-weight: 600; }
+      .gl-side__num { color: var(--accent); }
+    }
+  }
+
+  &__num {
+    font-family: var(--gl-mono);
+    font-size: 11px;
+    color: var(--ink-4);
+    padding: 8px 0 8px 16px;
+    flex: none;
+  }
+
+  &__item:not(.is-current) .gl-side__num { padding-left: 16px; }
+  &__item .gl-side__link { padding: 8px 0; }
+  &__item:not(:has(.gl-side__num)) .gl-side__link { padding-left: 16px; }
+
+  &__link {
+    display: block;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink-3);
+    text-decoration: none;
+    transition: color 0.16s ease;
+  }
+
+  a.gl-side__link:hover { color: var(--ink); }
+
+  &__more {
+    display: inline-block;
+    margin-top: 16px;
+    padding-left: 16px;
+    font-size: 12.5px;
+    color: var(--ink-3);
+    text-decoration: none;
+  }
+  &__more:hover { color: var(--accent); }
+}
+
+// --------------------------------------------------------------------------
+// 14. 이전 / 다음 글
+// --------------------------------------------------------------------------
+.gl-pager {
+  clear: both; // 우측 목차가 float 이라 안 끊으면 그 옆으로 밀려 세로로 찌그러진다
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 40px;
+  max-width: calc(100% - var(--gl-toc-width) - var(--gl-toc-gap));
+
+  &__item {
+    border: 1px solid var(--line);
+    border-radius: var(--gl-radius);
+    padding: 18px 20px;
+    background: var(--paper);
+    text-decoration: none;
+    transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+
+    &--next { text-align: right; }
+    &--empty { border: 0; background: transparent; }
+  }
+
+  a.gl-pager__item:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+
+  &__label {
+    display: block;
+    font-family: var(--gl-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ink-4);
+    margin-bottom: 7px;
+  }
+
+  &__title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  @media (max-width: 760px) {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: none;
+
+    &__item--next { text-align: left; }
+    &__item--empty { display: none; }
+  }
+}
+
+// --------------------------------------------------------------------------
+// 15. 관련 글
+// --------------------------------------------------------------------------
+.page__related {
+  clear: both;
+  grid-column: 1 / -1; // 3단 그리드에서 좌측 칸에 끼면 폭이 0 이 된다
+  border-top: 1px solid var(--line);
+  margin-top: 56px;
+  padding-top: 36px;
+  float: none;
+  width: 100%;
+
+  .page__related-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 18px;
+    text-transform: none;
+    border-bottom: 0;
+  }
+
+  .grid__wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .grid__item {
+    width: 100%;
+    margin: 0;
+    float: none;
+  }
+
+  // 목록용 번호/메타는 카드에서는 군더더기다
+  .archive__item {
+    display: block;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+
+    &::before { content: none; }
+  }
+
+  .archive__item-title {
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 12px 0 0;
+
+    a { color: var(--ink); text-decoration: none; }
+    a:hover { color: var(--accent); }
+  }
+
+  .archive__item-excerpt {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--ink-3);
+    margin: 6px 0 0;
+  }
+
+  .archive__item-teaser {
+    border-radius: var(--gl-radius);
+    overflow: hidden;
+    border: 1px solid var(--line);
+
+    img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+  }
+
+  .gl-entry-tags,
+  .gl-entry-meta { display: none; }
+}

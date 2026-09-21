@@ -2,9 +2,38 @@
 layout: archive
 ---
 
+<section class="gl-hero">
+  <div class="gl-hero__grid">
+    <div>
+      {% if site.hero.eyebrow %}<div class="gl-eyebrow">{{ site.hero.eyebrow }}</div>{% endif %}
+      <h1 class="gl-hero__title">{{ site.hero.title | default: site.title }}</h1>
+      {% if site.hero.lede %}<p class="gl-hero__lede">{{ site.hero.lede }}</p>{% endif %}
+
+      <div class="gl-hero__links">
+        {% for link in site.author.links %}
+          {% if link.label and link.url %}
+            <a class="gl-pill" href="{{ link.url }}" rel="nofollow noopener noreferrer"><i class="{{ link.icon | default: 'fas fa-fw fa-link' }}" aria-hidden="true"></i>{{ link.label }}</a>
+          {% endif %}
+        {% endfor %}
+        <a class="gl-pill" href="{% if site.atom_feed.path %}{{ site.atom_feed.path }}{% else %}{{ '/feed.xml' | relative_url }}{% endif %}">RSS</a>
+      </div>
+    </div>
+
+    {% if site.author.avatar %}
+      <div class="gl-hero__avatar">
+        <img src="{{ site.author.avatar | relative_url }}" alt="{{ site.author.name }}" width="164" height="164">
+      </div>
+    {% endif %}
+  </div>
+</section>
+
 {{ content }}
 
-<h3 class="archive__subtitle">{{ site.data.ui-text[site.locale].recent_posts | default: "Recent Posts" }}</h3>
+<div class="gl-section-head">
+  <span class="gl-eyebrow">Writing</span>
+  <h2>최근 글</h2>
+  <a class="gl-more" href="{{ '/categories/' | relative_url }}">전체 보기 &rarr;</a>
+</div>
 
 {% if paginator %}
   {% assign posts = paginator.posts %}

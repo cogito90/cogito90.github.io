@@ -99,10 +99,16 @@ analytics:
     stream_id            : "G-HT2GRSBMEE"
     anonymize_ip         : # true, false (default)
 
+# Home hero (Glacier)
+hero:
+  eyebrow          : "cogito90"
+  title            : "개발자가 바라보는 <em>삶</em>에 대한 이야기"
+  lede             : "개발과 철학. 다르지만 닮은 두 주제로 인생을 얘기합니다<br>AI와 함께하는 현재와 미래에 대한 얘기도 합니다"
+
 # Site Author
 author:
-  name             : "Moon Yoo"
-  avatar           : "/assets/images/avatar.jpg"
+  name             : "Cogito90"
+  avatar           : "/assets/images/avatar.png"
   bio              : ""
   location         :
   email            :
@@ -282,15 +288,13 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       read_time: true
       comments: true
       share: false
-      related: true
+      related: false
       is_post: true
       is_comment: true
-      sidebar:
-        nav: "sidebar-main"
       toc: true
       toc_sticky: true
 
@@ -300,14 +304,12 @@ defaults:
       type: pages
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       read_time: false
       comments: false
       share: false
       related: false
       is_comment: true
       is_post: false
-      sidebar:
-        nav: "sidebar-main"
       toc: false
       toc_sticky: true

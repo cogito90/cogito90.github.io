@@ -2,9 +2,11 @@
 layout: default
 ---
 
-{% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
-  {% include page__hero.html %}
-{% elsif page.header.video.id and page.header.video.provider %}
+{% comment %}
+  Glacier 시안에는 오버레이 히어로가 없다. header.overlay_image 는 목록 teaser 로만 쓰이고
+  본문 상단에는 아래의 .gl-post-head 가 대신 선다. 영상 히어로는 그대로 둔다.
+{% endcomment %}
+{% if page.header.video.id and page.header.video.provider %}
   {% include page__hero_video.html %}
 {% endif %}
 
@@ -16,6 +18,7 @@ layout: default
 
 <div id="main" role="main">
   {% include sidebar.html %}
+  {% if page.is_post %}{% include gl-sidebar.html %}{% endif %}
 
   <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
     {% if page.title %}<meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
@@ -24,15 +27,38 @@ layout: default
     {% if page.last_modified_at %}<meta itemprop="dateModified" content="{{ page.last_modified_at | date_to_xmlschema }}">{% endif %}
 
     <div class="page__inner-wrap">
-      {% unless page.header.overlay_color or page.header.overlay_image %}
-        <header>
-          {% if page.title %}<h1 id="page-title" class="page__title p-name" itemprop="headline">
-            <a href="{{ page.url | absolute_url }}" class="u-url" itemprop="url">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</a>
-          </h1>{% endif %}
-<!--          {% include page__meta.html %}-->
-          {% if page.is_post %}<p class="page__date"><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time></p>{% endif %}
-        </header>
-      {% endunless %}
+      {% assign gl_chars = page.content | strip_html | size %}
+      {% assign gl_read = gl_chars | divided_by: 500 | plus: 1 %}
+
+      <header class="gl-post-head">
+        {% if page.is_post %}
+          <div class="gl-post-head__kicker">
+            {% if page.categories.size > 0 %}<span class="gl-post-head__cat">{{ page.categories.first }}</span>{% endif %}
+            <span class="gl-eyebrow"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y.%m.%d" }}</time></span>
+          </div>
+        {% endif %}
+
+        {% if page.title %}<h1 id="page-title" class="page__title p-name" itemprop="headline">
+          <a href="{{ page.url | absolute_url }}" class="u-url" itemprop="url">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</a>
+        </h1>{% endif %}
+
+        {% if page.is_post and page.excerpt %}
+          <p class="gl-post-head__lede">{{ page.excerpt | markdownify | strip_html | strip_newlines }}</p>
+        {% endif %}
+
+        {% if page.is_post %}
+          <div class="gl-post-head__byline">
+            {% if site.author.avatar %}<img src="{{ site.author.avatar | relative_url }}" alt="{{ site.author.name }}" width="38" height="38">{% endif %}
+            <b>{{ site.author.name }}</b>
+            <span class="gl-dot">&middot;</span>
+            <span class="gl-mono">{{ gl_read }} MIN READ</span>
+            {% if page.last_modified_at %}
+              <span class="gl-dot">&middot;</span>
+              <span class="gl-mono">UPDATED {{ page.last_modified_at | date: "%Y.%m.%d" }}</span>
+            {% endif %}
+          </div>
+        {% endif %}
+      </header>
 
       <section class="page__content e-content" itemprop="text">
         {% if page.toc %}
@@ -57,7 +83,21 @@ layout: default
 
       {% if page.share %}{% include social-share.html %}{% endif %}
 
+      {% comment %} 이전/다음 글은 요청으로 내림. 되살리려면 아래 한 줄 주석 해제.
       {% include post_pagination.html %}
+      {% endcomment %}
+
+      {% if page.is_comment %}
+        <div class="gl-comments">
+          <script src="https://utteranc.es/client.js"
+                  repo="cogito90/cogito90.github.io"
+                  issue-term="url"
+                  theme="github-light"
+                  crossorigin="anonymous"
+                  async>
+          </script>
+        </div>
+      {% endif %}
     </div>
 
     {% if jekyll.environment == 'production' and site.comments.provider and page.comments %}
@@ -65,60 +105,4 @@ layout: default
     {% endif %}
   </article>
 
-  {% comment %}<!-- only show related on a post page when `related: true` -->{% endcomment %}
-  {% if page.id and page.related and site.related_posts.size > 0 %}
-    <div class="page__related">
-      <h2 class="page__related-title">{{ site.data.ui-text[site.locale].related_label | default: "You May Also Enjoy" }}</h2>
-      <div class="grid__wrapper">
-        {% assign page_index = 0 %}
-        {% assign count = 0 %}
-        {% assign filtered_posts = site.posts | where: "related_key", page.related_key %}
-
-        {% for post in filtered_posts %}
-          {% if post.id == page.id %}
-            {% assign page_index = forloop.index0 %}
-            {% break %}
-          {% endif %}
-        {% endfor %}
-
-        {% assign begin_index = page_index | minus: 2 %}
-        {% assign end_index = page_index | plus: 2 %}
-
-        {% if begin_index < 0 %}
-          {% assign end_index = end_index | minus: begin_index %}
-        {% endif %}
-
-        {% for post in filtered_posts %}
-          {% if post.id != page.id and forloop.index0 >= begin_index and forloop.index0 <= end_index %}
-            {% include archive-single.html type="grid" %}
-          {% endif %}
-        {% endfor %}
-      </div>
-    </div>
-  {% comment %}<!-- otherwise show recent posts if no related when `related: true` -->{% endcomment %}
-  {% elsif page.id and page.related %}
-    <div class="page__related">
-      <h2 class="page__related-title">또 다른 볼거리</h2>
-      <div class="grid__wrapper">
-        {% for post in site.posts limit:4 %}
-          {% if post.id == page.id %}
-            {% continue %}
-          {% endif %}
-          {% include archive-single.html type="grid" %}
-        {% endfor %}
-      </div>
-    </div>
-  {% endif %}
 </div>
-
-{% if page.is_comment %}
-<div>
-  <script src="https://utteranc.es/client.js"
-          repo="cogito90/cogito90.github.io"
-          issue-term="url"
-          theme="github-light"
-          crossorigin="anonymous"
-          async>
-  </script>
-</div>
-{% endif %}

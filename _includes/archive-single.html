@@ -10,6 +10,9 @@
   {% assign title = post.title %}
 {% endif %}
 
+{% assign gl_chars = post.content | strip_html | size %}
+{% assign gl_read = gl_chars | divided_by: 500 | plus: 1 %}
+
 <div class="{{ include.type | default: 'list' }}__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     {% if include.type == "grid" and teaser %}
@@ -17,6 +20,7 @@
         <img src="{{ teaser | relative_url }}" alt="">
       </div>
     {% endif %}
+
     <h2 class="archive__item-title no_toc" itemprop="headline">
       {% if post.link %}
         <a href="{{ post.link }}">{{ title }}</a> <a href="{{ post.url | relative_url }}" rel="permalink"><i class="fas fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
@@ -24,10 +28,19 @@
         <a href="{{ post.url | relative_url }}" rel="permalink">{{ title }}</a>
       {% endif %}
     </h2>
-<!--    {% include page__meta.html type=include.type %}-->
-    {% if post.date %}
-    <p class="page__meta"><i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i> {{ post.date | date: "%B %d %Y" }}</p>
-    {% endif %}
+
     {% if post.excerpt %}<p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify | strip_html | truncate: 160 }}</p>{% endif %}
+
+    {% if post.tags.size > 0 %}
+      <div class="gl-entry-tags">
+        {% for tag in post.tags limit: 4 %}<span class="gl-chip">{{ tag }}</span>{% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="gl-entry-meta">
+      {% if post.categories.size > 0 %}<span class="gl-entry-cat">{{ post.categories.first }}</span>{% endif %}
+      {% if post.date %}<span><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y.%m.%d" }}</time></span>{% endif %}
+      <span>{{ gl_read }} min</span>
+    </div>
   </article>
 </div>

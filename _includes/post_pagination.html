@@ -1,14 +1,25 @@
+{% comment %}
+  테마 기본 페이저는 "Previous / Next" 글자만 보여주고 제목은 title 속성에 숨긴다.
+  Glacier 시안대로 제목을 실제로 노출한다.
+{% endcomment %}
 {% if page.previous or page.next %}
-  <nav class="pagination">
+  <nav class="gl-pager" aria-label="이전 글 다음 글">
     {% if page.previous %}
-      <a href="{{ page.previous.url | relative_url }}" class="pagination--pager" title="{{ page.previous.title | markdownify | strip_html }}">{{ site.data.ui-text[site.locale].pagination_previous | default: "Previous" }}</a>
+      <a class="gl-pager__item" href="{{ page.previous.url | relative_url }}" rel="prev">
+        <span class="gl-pager__label">&larr; 이전 글</span>
+        <b class="gl-pager__title">{{ page.previous.title }}</b>
+      </a>
     {% else %}
-      <a href="#" class="pagination--pager disabled">{{ site.data.ui-text[site.locale].pagination_previous | default: "Previous" }}</a>
+      <span class="gl-pager__item gl-pager__item--empty" aria-hidden="true"></span>
     {% endif %}
+
     {% if page.next %}
-      <a href="{{ page.next.url | relative_url }}" class="pagination--pager" title="{{ page.next.title | markdownify | strip_html }}">{{ site.data.ui-text[site.locale].pagination_next | default: "Next" }}</a>
+      <a class="gl-pager__item gl-pager__item--next" href="{{ page.next.url | relative_url }}" rel="next">
+        <span class="gl-pager__label">다음 글 &rarr;</span>
+        <b class="gl-pager__title">{{ page.next.title }}</b>
+      </a>
     {% else %}
-      <a href="#" class="pagination--pager disabled">{{ site.data.ui-text[site.locale].pagination_next | default: "Next" }}</a>
+      <span class="gl-pager__item gl-pager__item--empty" aria-hidden="true"></span>
     {% endif %}
   </nav>
 {% endif %}

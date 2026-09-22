@@ -36,6 +36,3 @@ _site
 .mcp.json
 __pycache__/
 .playwright-mcp/
-
-# design mockup 비교용 (임시)
-.design-compare/

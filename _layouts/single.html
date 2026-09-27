@@ -33,7 +33,7 @@ layout: default
       <header class="gl-post-head">
         {% if page.is_post %}
           <div class="gl-post-head__kicker">
-            {% if page.categories.size > 0 %}<span class="gl-post-head__cat">{{ page.categories.first }}</span>{% endif %}
+            {% if page.categories.size > 0 %}{% assign gl_cat_key = page.categories.first %}<span class="gl-post-head__cat">{{ site.data.category_names[gl_cat_key] | default: gl_cat_key }}</span>{% endif %}
             <span class="gl-eyebrow"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y.%m.%d" }}</time></span>
           </div>
         {% endif %}

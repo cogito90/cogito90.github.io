@@ -425,7 +425,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 3em 0; }
     gap: 5px;
     align-items: flex-end;
 
-    .gl-entry-cat { color: var(--accent); font-weight: 500; text-transform: capitalize; }
+    .gl-entry-cat { color: var(--accent); font-weight: 500; }
   }
 
   @media (max-width: 760px) {

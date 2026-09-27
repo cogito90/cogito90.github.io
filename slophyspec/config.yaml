@@ -1,0 +1,7 @@
+tools:
+  - claude
+preset: default
+static-analysis:
+  modules: []
+db:
+  modules: []

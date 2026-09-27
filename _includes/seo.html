@@ -137,6 +137,39 @@
   }
 </script>
 
+{% comment %}
+  글(날짜가 있는 문서)에는 BlogPosting 을 따로 낸다.
+  위의 Person/Organization 은 사이트 주체를 가리킬 뿐 글 자체를 설명하지 않는다.
+{% endcomment %}
+{% if page.date %}
+  {%- assign article_image = page_large_image | default: page_teaser_image | default: site_og_image -%}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": { "@type": "WebPage", "@id": {{ canonical_url | jsonify }} },
+    "headline": {{ page.title | markdownify | strip_html | strip_newlines | strip | jsonify }},
+    "url": {{ canonical_url | jsonify }},
+    "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
+    "dateModified": {{ page.last_modified_at | default: page.date | date_to_xmlschema | jsonify }},
+    "inLanguage": {{ site.locale | default: "ko-KR" | jsonify }}{% if seo_description %},
+    "description": {{ seo_description | jsonify }}{% endif %}{% if article_image %},
+    "image": {{ article_image | jsonify }}{% endif %}{% if page.categories[0] %},
+    "articleSection": {% assign seo_cat = page.categories[0] %}{{ site.data.category_names[seo_cat] | default: seo_cat | jsonify }}{% endif %},
+    "author": {
+      "@type": "Person",
+      "name": {{ author.name | default: site.author.name | default: site.name | jsonify }},
+      "url": {{ '/' | absolute_url | jsonify }}
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": {{ site.author.name | default: site.name | jsonify }}{% if site_og_image %},
+      "image": {{ site_og_image | jsonify }}{% endif %}
+    }
+  }
+</script>
+{% endif %}
+
 {% if site.google_site_verification %}
   <meta name="google-site-verification" content="{{ site.google_site_verification }}" />
 {% endif %}

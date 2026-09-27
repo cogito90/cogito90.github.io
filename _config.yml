@@ -15,12 +15,12 @@
 minimal_mistakes_skin    : "air" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
-locale                   : "en-US"
+locale                   : "ko-KR"
 title                    : "삶은개발"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "cogito90"
-description              : ""
+description              : "개발과 철학, 그리고 AI. 개발자가 바라보는 삶에 대한 이야기."
 url                      : "https://cogito90.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -96,8 +96,8 @@ social:
 analytics:
   provider               : "google-gtag" # false (default), "google", "google-universal", "google-gtag", "custom"
   google:
-    tracking_id          :
-    stream_id            : "G-HT2GRSBMEE"
+    tracking_id          : "G-HT2GRSBMEE"   # GA4 측정 ID — gtag 스크립트가 읽는 값
+    stream_id            :
     anonymize_ip         : # true, false (default)
 
 # Home hero (Glacier)

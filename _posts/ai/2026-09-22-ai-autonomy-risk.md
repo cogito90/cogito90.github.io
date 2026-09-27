@@ -5,9 +5,6 @@ excerpt: "AI에게 일을 통째로 맡겨봤지만 잘 되지 않았다. 끝난
 categories:
 - ai
 
-tags:
-- AI
-
 header:
   teaser: /assets/images/ai-autonomy-risk/teaser.png
   overlay_image: /assets/images/ai-autonomy-risk/teaser.png

@@ -5,13 +5,6 @@ excerpt: "바이브 코딩 이후 '개발자는 끝났다'는 말이 넘쳐납�
 categories:
 - ai
 
-tags:
-- AI
-- 개발자
-- 바이브코딩
-- 커리어
-- 전문성
-
 header:
   teaser: /assets/images/ai-cannot-replace-you/teaser.png
   overlay_image: /assets/images/ai-cannot-replace-you/teaser.png

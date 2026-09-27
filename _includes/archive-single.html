@@ -31,12 +31,6 @@
 
     {% if post.excerpt %}<p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify | strip_html | truncate: 160 }}</p>{% endif %}
 
-    {% if post.tags.size > 0 %}
-      <div class="gl-entry-tags">
-        {% for tag in post.tags limit: 4 %}<span class="gl-chip">{{ tag }}</span>{% endfor %}
-      </div>
-    {% endif %}
-
     <div class="gl-entry-meta">
       {% if post.categories.size > 0 %}<span class="gl-entry-cat">{{ post.categories.first }}</span>{% endif %}
       {% if post.date %}<span><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y.%m.%d" }}</time></span>{% endif %}

@@ -340,6 +340,14 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 3em 0; }
   display: none; // 자체 섹션 헤더로 대체
 }
 
+.gl-empty {
+  margin: 0;
+  padding: 56px 0 72px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-4);
+  font-size: 14px;
+}
+
 .gl-section-head {
   display: flex;
   align-items: baseline;

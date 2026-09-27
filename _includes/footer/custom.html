@@ -41,6 +41,53 @@
       });
     }
 
+    // 이메일 주소 클립보드 복사 — mailto 는 메일 앱이 없으면 아무 일도 안 일어난다
+    document.querySelectorAll('.gl-copy').forEach(function (el) {
+      var label = el.querySelector('.gl-copy__text');
+      if (!label) return;
+      var original = label.textContent;
+      var timer = null;
+
+      function flash(message) {
+        label.textContent = message;
+        el.classList.add('is-copied');
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          label.textContent = original;
+          el.classList.remove('is-copied');
+        }, 1600);
+      }
+
+      function fallbackCopy(text) {
+        // clipboard API 가 없거나 거부된 경우 (구형 브라우저 / 비보안 컨텍스트)
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+        return ok;
+      }
+
+      el.addEventListener('click', function () {
+        var text = el.getAttribute('data-copy');
+        if (!text) return;
+
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(
+            function () { flash('복사됐습니다'); },
+            function () { flash(fallbackCopy(text) ? '복사됐습니다' : text); }
+          );
+        } else {
+          flash(fallbackCopy(text) ? '복사됐습니다' : text);
+        }
+      });
+    });
+
     // 글 상세에서만 읽기 진행 바
     if (document.querySelector('.gl-post-head__byline')) {
       var bar = document.createElement('div');

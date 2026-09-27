@@ -10,12 +10,18 @@ layout: archive
       {% if site.hero.lede %}<p class="gl-hero__lede">{{ site.hero.lede }}</p>{% endif %}
 
       <div class="gl-hero__links">
+        {% if site.author.email %}
+          <button type="button" class="gl-pill gl-copy" data-copy="{{ site.author.email }}"
+                  aria-label="이메일 주소 {{ site.author.email }} 복사">
+            <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i>
+            <span class="gl-copy__text">{{ site.author.email }}</span>
+          </button>
+        {% endif %}
         {% for link in site.author.links %}
           {% if link.label and link.url %}
             <a class="gl-pill" href="{{ link.url }}" rel="nofollow noopener noreferrer"><i class="{{ link.icon | default: 'fas fa-fw fa-link' }}" aria-hidden="true"></i>{{ link.label }}</a>
           {% endif %}
         {% endfor %}
-        <a class="gl-pill" href="{% if site.atom_feed.path %}{{ site.atom_feed.path }}{% else %}{{ '/feed.xml' | relative_url }}{% endif %}">RSS</a>
       </div>
     </div>
 

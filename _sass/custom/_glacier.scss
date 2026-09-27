@@ -274,6 +274,22 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 3em 0; }
   i { font-size: 14px; }
 }
 
+// 이메일 복사 버튼 — .gl-pill 을 <button> 으로 쓰므로 기본 스타일을 지운다
+.gl-copy {
+  font-family: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+
+  .gl-copy__text { font-variant-numeric: tabular-nums; }
+
+  &.is-copied {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
 // --------------------------------------------------------------------------
 // 5. 홈 히어로
 // --------------------------------------------------------------------------

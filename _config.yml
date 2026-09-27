@@ -83,7 +83,8 @@ facebook:
   username               :
   app_id                 :
   publisher              :
-og_image                 : # Open Graph/Twitter default site image
+# 공유 카드 기본 이미지. 글별 teaser 는 선택 사항이며, 없으면 이 카드가 쓰인다
+og_image                 : "/assets/images/og-card.png"
 # For specifying social profiles
 # - https://developers.google.com/structured-data/customize/social-profiles
 social:

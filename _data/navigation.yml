@@ -1,10 +1,8 @@
 # main links
 main:
-  - title: "Series"
-    url: /categories/series/
   - title: "AI"
     url: /categories/ai/
-  - title: "Shorts"
-    url: /categories/shorts/
-  - title: "About"
-    url: /about/
+  - title: "Philosophy"
+    url: /categories/philosophy/
+  - title: "Tech"
+    url: /categories/tech/

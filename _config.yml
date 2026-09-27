@@ -187,6 +187,15 @@ exclude:
   - tmp
   - /docs # ignore Minimal Mistakes /docs
   - /test # ignore Minimal Mistakes /test
+  # 개발용 파일 — 빌드 산출물에 포함시키지 않는다
+  - AGENTS.md
+  - ARCHITECT.md
+  - slophyspec
+  - banner.js
+  - minimal-mistakes-jekyll.gemspec
+  - screenshot.png
+  - screenshot-layouts.png
+  - staticman.yml
 keep_files:
   - .git
   - .svn

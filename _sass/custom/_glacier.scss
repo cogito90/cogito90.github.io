@@ -575,6 +575,44 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 3em 0; }
   > figure,
   > table { margin: 0 0 1.35em; }
 
+  // 테마 원본(_tables.scss)은 thead 배경을 Sass 고정값($border-color)으로 박아서
+  // 다크 테마에서 밝은 배경 위에 밝은 글자가 올라가 내용이 사라진다. 토큰으로 다시 건다.
+  // 테마가 건 display:block 때문에 표가 내용 폭으로 줄고 테두리만 넓게 남는다.
+  // 넓은 화면에서는 본문 폭을 채우고, 좁은 화면에서만 가로 스크롤로 돌린다.
+  table {
+    display: table;
+    width: 100%;
+    font-family: inherit;
+    font-size: 14.5px;
+    line-height: 1.65;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden; // 모서리 둥글기가 thead 배경을 자르도록
+  }
+
+  @media (max-width: 760px) {
+    table { display: block; overflow-x: auto; }
+  }
+
+  thead {
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--line);
+  }
+
+  th {
+    color: var(--ink);
+    font-weight: 700;
+    padding: 9px 13px;
+  }
+
+  td {
+    color: var(--ink-2);
+    padding: 9px 13px;
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  tbody tr:last-child td { border-bottom: 0; }
+
   h2 {
     color: var(--ink);
     font-size: 23px;

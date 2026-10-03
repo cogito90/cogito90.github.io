@@ -11,5 +11,7 @@
     <a href="{% if site.atom_feed.path %}{{ site.atom_feed.path }}{% else %}{{ '/feed.xml' | relative_url }}{% endif %}">RSS</a>
   {% endunless %}
 
+  <a href="{{ '/privacy/' | relative_url }}">개인정보처리방침</a>
+
   <span class="gl-footer__mono">Built with Jekyll &middot; minimal-mistakes</span>
 </div>

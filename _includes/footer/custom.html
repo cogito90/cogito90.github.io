@@ -3,30 +3,11 @@
 <script>
   (function () {
     var root = document.documentElement;
-    var UTTERANCES_ORIGIN = 'https://utteranc.es';
 
     function currentTheme() {
       // 기본은 라이트 — OS 설정은 보지 않는다
       return root.getAttribute('data-theme') || 'light';
     }
-
-    // utterances 는 iframe 이라 CSS 로 색을 못 바꾼다. postMessage 로 테마를 넘긴다.
-    function syncComments() {
-      var frame = document.querySelector('iframe.utterances-frame');
-      if (!frame || !frame.contentWindow) return;
-      frame.contentWindow.postMessage(
-        { type: 'set-theme', theme: currentTheme() === 'dark' ? 'github-dark' : 'github-light' },
-        UTTERANCES_ORIGIN
-      );
-    }
-
-    // iframe 이 처음 뜰 때 한 번만 맞춰준다. 매번 보내면 resize 메시지와 물려 루프가 된다.
-    var commentsSynced = false;
-    window.addEventListener('message', function (e) {
-      if (e.origin !== UTTERANCES_ORIGIN || commentsSynced) return;
-      commentsSynced = true;
-      syncComments();
-    });
 
     // 테마 토글
     var btn = document.getElementById('gl-theme-toggle');
@@ -37,7 +18,6 @@
         var meta = document.querySelector('meta[name="theme-color"]');
         if (meta) { meta.setAttribute('content', next === 'dark' ? '#0c1014' : '#fbfcfd'); }
         try { localStorage.setItem('gl-theme', next); } catch (e) {}
-        syncComments();
       });
     }
 

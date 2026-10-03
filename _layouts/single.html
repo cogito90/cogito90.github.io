@@ -86,23 +86,7 @@ layout: default
       {% comment %} 이전/다음 글은 요청으로 내림. 되살리려면 아래 한 줄 주석 해제.
       {% include post_pagination.html %}
       {% endcomment %}
-
-      {% if page.is_comment %}
-        <div class="gl-comments">
-          <script src="https://utteranc.es/client.js"
-                  repo="cogito90/cogito90.github.io"
-                  issue-term="url"
-                  theme="github-light"
-                  crossorigin="anonymous"
-                  async>
-          </script>
-        </div>
-      {% endif %}
     </div>
-
-    {% if jekyll.environment == 'production' and site.comments.provider and page.comments %}
-      {% include comments.html %}
-    {% endif %}
   </article>
 
 </div>

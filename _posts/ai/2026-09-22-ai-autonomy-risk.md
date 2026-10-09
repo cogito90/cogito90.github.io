@@ -1,7 +1,7 @@
 ---
 
-title:  "AI에게 자율성을 주지 말아야 하는 이유"
-excerpt: "AI에게 일을 통째로 맡기는 워크플로를 만들었다가 결국 그만뒀습니다. 끝난 뒤의 검증은 결국 코드리뷰가 되고, 놓친 맥락은 지식의 부채로 쌓입니다. 어디서 많이 본 이 구조, 워터폴이죠."
+title:  "AI는 애자일하게 다뤄야 한다"
+excerpt: "AI에게 작업을 자율적으로 시키는 건, 생산성 향상에 정말 도움이 될까요? 워터폴이 죽은 이유는 뭘까요?"
 categories:
 - ai
 
@@ -10,7 +10,7 @@ header:
   overlay_image: /assets/images/ai-autonomy-risk/teaser.png
   overlay_filter: 0.5
 
-last_modified_at: 2026-10-06T19:36:00
+last_modified_at: 2026-10-09T09:57:00
 
 ---
 
